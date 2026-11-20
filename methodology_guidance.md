@@ -136,3 +136,4 @@ The original plan puts null tests and outlook in month 5. Moving null tests to s
 - Appapogu, Behrens, Belinkov, Mueller. *MAxBench: A Multinomial Concept Recovery Benchmark.* [arXiv:2609.13072](https://arxiv.org/abs/2609.13072)
 - Bhalla, Fel, Rager, et al. *Do Sparse Autoencoders Capture Concept Manifolds?* [arXiv:2604.28119](https://arxiv.org/abs/2604.28119)
 - Code: [goodfire-ai/causalab @ manifold_steering](https://github.com/goodfire-ai/causalab/tree/manifold_steering)
+
