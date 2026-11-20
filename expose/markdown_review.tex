@@ -1,0 +1,342 @@
+% ===========================================================================
+%  Review of the Obsidian notes (companion to expose_draft.tex, not submitted)
+%  1  Errors and inaccuracies in the notes
+%  2  Ratings of the terminology notes
+%  3  Bibliography remarks
+%  4  Answers to "Next Meeting.md"
+%  5  Claude's ideas that do not belong in the exposé
+% ===========================================================================
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage{csquotes}
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{parskip}
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{1.2ex plus .5ex}{0.5ex}
+\titlespacing*{\subsection}{0pt}{0.8ex plus .3ex}{0.3ex}
+\usepackage{amsmath}
+\usepackage{booktabs,tabularx}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*}
+\usepackage{xcolor}
+
+\usepackage[backend=biber,style=numeric-comp,sorting=none,
+            maxbibnames=3,giveninits=true,doi=false]{biblatex}
+\addbibresource{references.bib}
+\renewcommand*{\bibfont}{\small}
+\AtEveryBibitem{%
+  \iffieldundef{eprint}{}{\clearfield{url}}%
+  \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}}
+
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\note}[1]{\textsf{#1}}                 % name of an Obsidian note
+\newcommand{\sev}[1]{\textbf{[#1]}}                 % severity tag
+\newcommand{\claim}[1]{\enquote{\textit{#1}}}       % quoted claim from a note
+\newcommand{\fixed}{\textbf{\textcolor{green!50!black}{[corrected in the note]}}} % done
+
+\begin{document}
+
+\begin{center}
+  {\Large\bfseries Review of the Obsidian Notes}\\[0.6ex]
+  Companion to the exposé draft \textbullet\ \today
+\end{center}
+
+This document collects what did not belong in \texttt{expose\_draft.tex}: claims in
+the notes that are wrong or inaccurate (Section~\ref{sec:errors}), a rating
+of the notes that only explain terminology (Section~\ref{sec:ratings}),
+remarks on the bibliography (Section~\ref{sec:bib}), and short answers to the
+open questions in \note{Next Meeting.md} (Section~\ref{sec:meeting}).
+Every claim was checked against the paper itself (arXiv abstract or full
+text), not against secondary summaries.
+
+Severity: \sev{Error} the claim is wrong; \sev{Inaccurate} partly right, but
+misleading if copied into the exposé; \sev{Minor} wording, links, spelling.
+
+\textbf{Status (11 Nov 2026):} every item in Section~\ref{sec:errors} has
+been corrected directly in the notes (\fixed). None of these errors appear
+in \texttt{expose\_draft.tex}. Three of the notes now live in the vault folder
+\note{unimportant or old} (Integrated Gradients, Benchmarks for Mechanistic
+Interpretability, and the Hubinger note); they were corrected there.
+
+% ===========================================================================
+\section{Errors and Inaccuracies in the Notes}\label{sec:errors}
+
+\subsection{Notes linked from Structure.md}
+
+\paragraph{\note{Origins - where geometry comes from.md}}
+\begin{itemize}
+  \item \fixed\ \sev{Error} The Prieto et al.\ paper is listed as
+    \claim{Correlations in the Data Lead to Semantically Rich Feature
+    Geometry under Superposition (ICLR 2026)}. The actual title is
+    \emph{From Data Statistics to Feature Geometry: How Correlations Shape
+    Superposition}~\cite{prieto2026correlations}. The venue (ICLR 2026) is
+    correct. The new bib entry uses the right title.
+  \item \fixed\ \sev{Error} Modell et al.: \claim{With the question [\dots] they
+    introduce the superposition hypothesis}. They do not introduce it; they
+    refer to it as an existing, \enquote{generally agreed upon explanation}
+    and cite \textcite{elhage2022toy}. Their own answer to the question is
+    different: since layers are linked by linear operations, a curve through
+    a higher-dimensional subspace lets linear maps compute more (e.g.,
+    polynomials of the feature value)~\cite{modell2025origins}.
+  \item \fixed\ \sev{Minor} \claim{Olaf and Batson (2024)} should be \emph{Olah and
+    Batson}. Modell et al.\ give the year 2024, although the URL of the
+    \emph{Feature Manifold Toy Model} update says 2023, so check before
+    citing it.
+  \item \fixed\ \sev{Minor} The fourth link for modular arithmetic is
+    written as \texttt{(arXiv:2210.01123)} and does not resolve; it should be
+    \url{https://arxiv.org/abs/2210.01123}.
+  \item \fixed\ \textit{Not an error of the note:} the colour mapping \claim{0: red,
+    \dots, $\pi/3$: blue, \dots, $2\pi/3$: yellow} is copied correctly from
+    the paper~\cite{modell2025origins}. It does not match the usual hue
+    wheel (yellow at $\pi/3$, blue at $4\pi/3$), so do not reuse it without
+    the paper's own definition.
+\end{itemize}
+
+\paragraph{\note{Methods - finding and using geometry.md}}
+\begin{itemize}
+  \item \fixed\ \sev{Minor} The GitHub link for Bhalla et al.\ is broken:
+    \nolinkurl{https://arxiv.org/pdf/~https://github.com/...}.
+    Correct: \url{https://github.com/goodfire-ai/sae-manifold}.
+  \item \fixed\ \sev{Inaccurate} \claim{This paper argues that low reconstruction
+    error is a trap} reads like a quote, but the paper says \enquote{low
+    reconstruction error alone does not guarantee coherent manifold
+    recovery}~\cite{bhalla2026saemanifolds}. Use the paper's wording.
+  \item \fixed\ \sev{Inaccurate} \claim{strong evidence, that Concepts aren't stored
+    in single, isolated features. Instead, a concept is represented by a
+    subspace}. The paper makes a narrower claim: for manifolds tiled by an
+    SAE, only the \emph{group} of features carries the geometry, so
+    interpretation has to reason about subspaces~\cite{bhalla2026saemanifolds}.
+    It does not claim this for concepts in general.
+\end{itemize}
+
+\paragraph{\note{Benchmarks.md}}
+\begin{itemize}
+  \item \fixed\ \sev{Inaccurate} MAxBench methods: MFA is listed under
+    \claim{linear}. MFA is a mixture of local Gaussian (affine) regions, so
+    it is piecewise, not globally linear~\cite{shafran2026regions}. The list
+    also misses two of the ten methods, Linear Probe and Factor
+    Analysis~\cite{appapogu2026maxbench}.
+  \item \fixed\ \textit{Addition:} the limitation of the manifold method is
+    stronger than \enquote{ordered concepts}: in its standard form it also
+    needs the complete sequence of values, and in the main evaluation it
+    is only applied to \emph{Days}~\cite{appapogu2026maxbench}.
+\end{itemize}
+
+\paragraph{\note{Foundations - what neural geometry is.md}}
+No errors found. The quotes from the Goodfire post and from Engels et al.\
+match the sources~\cite{goodfire2026world,engels2025notall}.
+
+\paragraph{\note{Structure.md}}
+The writing task is correct: the Goodfire post spells the name
+\enquote{Karkada} in footnotes 3 and 11 but \enquote{Kakada} in footnotes 20
+and 21~\cite{goodfire2026world}. The exposé cites it as
+\textcite{karkada2026symmetry}.
+
+\subsection{Other notes}
+
+\paragraph{\note{unsupervised manifold steering.md}}
+\begin{itemize}
+  \item \fixed\ \sev{Inaccurate} \claim{Bhalla et al.\ [\dots] read shapes visually
+    and don't steer along new ones}. The second half is right. The first
+    half is not: on the synthetic benchmark, decoding through the recovered
+    atom groups reconstructs topology and geometry \enquote{without
+    supervision}~\cite{bhalla2026saemanifolds}. They do steer, but only
+    along supervised manifolds (between labelled centroids).
+  \item \fixed\ \textit{Update to \claim{Run a fresh literature check}:} the closest
+    new work is SMIXAE~\cite{francel2026smixae} (unsupervised discovery with
+    a mixture of autoencoders, no steering yet). A search found no paper that
+    combines unsupervised discovery with steering along the discovered
+    manifold, so the gap still holds (as of \today).
+\end{itemize}
+
+\paragraph{\note{Mechanistic Interpretability and Geometry.md} (AI-generated reading list)}
+\begin{itemize}
+  \item \fixed\ \sev{Error} Elhage et al.\ is called \claim{the mathematical proof of
+    how networks exploit high-dimensional geometry}. It is an empirical study
+    of small toy models (with some analysis), not a proof about real
+    networks~\cite{elhage2022toy}.
+  \item \fixed\ \sev{Error} Huh et al.\ (\emph{The Platonic Representation
+    Hypothesis}, 2024) \claim{proves mathematically that [\dots] their
+    internal vector geometries map out the exact same \enquote{Platonic}
+    shape}. It is a position paper: it states a \emph{hypothesis} and gives
+    empirical evidence that representations become more similar as models
+    scale. It proves no exact identity.
+  \item \fixed\ \sev{Error} The Park et al.\ paper is cited as \claim{A Geometric
+    Framework for Categorical and Hierarchical Concepts in LLMs}. The actual
+    title is \emph{The Geometry of Categorical and Hierarchical Concepts in
+    Large Language Models} (Park, Choe, Jiang, Veitch; ICLR 2025).
+  \item \fixed\ \sev{Minor} Engels et al.\ is cited as \claim{Not all language model
+    features are linear}. The full title is \emph{Not All Language Model
+    Features Are One-Dimensionally Linear}~\cite{engels2025notall}.
+    \claim{perfectly circular} overstates it: the circles are approximate.
+\end{itemize}
+
+\paragraph{\note{Mechanistic Interpretability for AI Safety.md}}
+\begin{itemize}
+  \item \fixed\ \sev{Error} \claim{Missing in the paper: Mechanistic
+    Interpretability (Reverse-Engineering Circuits), Developmental
+    Interpretability}. Both are covered by \textcite{bereska2024review}, and
+    the same note later summarises them (\enquote{Developmental
+    interpretability}, \enquote{Dissecting Models into Interpretable
+    Circuits}).
+  \item \fixed\ \sev{Inaccurate} \claim{are there alternatives to RL(HF) [\dots]
+    yes, [\dots] Representation Engineering}. See the next item.
+\end{itemize}
+
+\paragraph{\note{Representation Engineering.md}}
+\begin{itemize}
+  \item \fixed\ \sev{Inaccurate} The note frames RepE as a replacement for RLHF.
+    \textcite{zou2023representation} present it as \enquote{a top-down
+    approach to AI transparency}. Steering at inference time is one use, but
+    the paper does not position it as an alternative alignment method to
+    RLHF. (The old exposé had the same TODO.)
+\end{itemize}
+
+\paragraph{\note{Integrated Gradients.md}}
+\begin{itemize}
+  \item \fixed\ \sev{Error} \claim{Sundararajan et al.\ proved that Integrated
+    Gradients is the only attribution method that simultaneously satisfies
+    [\dots] Completeness [and] Sensitivity}. The two axioms the method is
+    built on are \emph{Sensitivity} and \emph{Implementation Invariance}.
+    Completeness is a property it has, and other methods (e.g., DeepLIFT,
+    LRP) also satisfy it. The uniqueness result is narrower: IG is the
+    unique \emph{path} method that is symmetry-preserving (Sundararajan,
+    Taly and Yan, ICML 2017).
+  \item \fixed\ \sev{Inaccurate} \claim{solving the saturation problem entirely}.
+    IG avoids saturation at the input point, but its result depends on the
+    choice of baseline, which is its own well-known problem.
+\end{itemize}
+
+\paragraph{\note{Benchmarks for Mechanistic Interpretability.md}}
+\begin{itemize}
+  \item \fixed\ \sev{Error} SAEBench: \claim{Rather than measuring abstract loss
+    metrics (like reconstruction error) [\dots] circuit reconstruction}.
+    SAEBench \emph{does} include reconstruction: its first metric,
+    \enquote{Core}, covers L0 sparsity and loss recovered. Circuit
+    reconstruction is not one of its metrics. The eight metrics are: Core,
+    Automated Interpretability, Sparse Probing, RAVEL, Feature Absorption,
+    Unlearning, Spurious Correlation Removal and Targeted Probe
+    Perturbation~\cite{karvonen2025saebench}.
+\end{itemize}
+
+% ===========================================================================
+\section{Ratings of the Terminology Notes}\label{sec:ratings}
+Rating: should the topic appear in the exposé on unsupervised manifold
+steering? 5 = needs its own subsection, 1 = leave it out.
+
+\begin{center}
+\small
+\begin{tabularx}{\textwidth}{@{}l c X@{}}
+\toprule
+Note & Rating & Reason \\
+\midrule
+Topological Data Analysis & 4/5 &
+  The note is only a link, but persistent homology is a step of the
+  pipeline (finding the shape of a candidate group). It needs a short
+  paragraph, e.g., from the old exposé~\cite{gardinazzi2024persistent,tauzin2021giotto}.
+  Fill the note before writing it. \\
+Representation Engineering & 3/5 &
+  One or two sentences as background: linear steering vectors are the
+  baseline that manifold steering is compared against~\cite{zou2023representation,wurgaft2026manifoldsteering}.
+  The RLHF framing is now corrected (Section~\ref{sec:errors}). \\
+Toy Models & 3/5 &
+  Superposition is already cited in the Motivation~\cite{elhage2022toy}; a
+  citation is enough, no own section. The note now has five sentences on
+  \textcite{elhage2022toy} and \textcite{prieto2026correlations}. \\
+may trigger normative shifts\dots & 2/5 &
+  Hubinger's four ways interpretability helps safety are general
+  motivation; one sentence in the Introduction at most. The note's title
+  is a sentence fragment from the review; consider renaming it. \\
+Benchmarks for Mech.\ Interp. & 2/5 &
+  Superseded by \note{Benchmarks.md}; InterpBench and MIB target
+  circuits, not manifolds. The SAEBench error is corrected; the note is
+  now in \note{unimportant or old}. \\
+Integrated Gradients & 1/5 &
+  Input attribution; not part of the pipeline. One loose link: IG also
+  integrates along a \emph{straight} path, the same assumption manifold
+  steering argues against. A footnote at most. \\
+SmoothGrad & 1/5 &
+  Not relevant to the topic; agree with the \enquote{probably delete} tag. \\
+Data & 1/5 &
+  Only a link to the MIB datasets, which are for circuit localization. \\
+PROBABLY DELETE Memory and Context & 0/5 &
+  A different topic (memory compaction, KV caches). Agree to delete. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+% ===========================================================================
+\section{Bibliography Remarks}\label{sec:bib}
+\begin{itemize}[before=\raggedright]
+  \item \textit{Completed:} \texttt{shafran2026regions} and
+    \texttt{modell2025origins} had only first-author names and short
+    titles; both now have full authors and titles.
+  \item \textit{Added:} \texttt{goodfire2026world},
+    \texttt{karkada2026symmetry}, \texttt{prieto2026correlations},
+    \texttt{oozeer2026riemannian}, \texttt{francel2026smixae},
+    \texttt{biderman2023pythia}, \texttt{gu2023mamba},
+    \texttt{su2021roformer}, \texttt{tenenbaum2000isomap},
+    \texttt{coifman2006diffusion}.
+  \item \textit{Corrected:} \texttt{korznikov2026sanity} said ICML 2026
+    (main conference). It is a poster at the ICML 2026 Workshop on
+    Mechanistic Interpretability (\url{https://icml.cc/virtual/2026/79403});
+    venue, full authors and full title (\enquote{\dots: Do SAEs Beat Random
+    Baselines?}) are now fixed.
+  \item \textit{Confirmed:} \texttt{wurgaft2026manifoldsteering} is a
+    spotlight at the same workshop (\url{https://icml.cc/virtual/2026/79460}).
+  \item \textit{Corrected:} \texttt{gurnee2025manifolds} now cites the
+    original Transformer Circuits publication (21~October 2025) with full
+    authors and title, and notes the arXiv version (2601.04480, 2026).
+  \item \textit{Removed from one claim:} \texttt{bigelow2026stories} was
+    cited for the valence--arousal circle, but its abstract is about belief
+    updates in story understanding and does not mention emotions. The
+    exposé now cites only \texttt{sun2026valence} there.
+\end{itemize}
+
+% ===========================================================================
+\section{Answers to Next Meeting.md}\label{sec:meeting}
+\begin{itemize}
+  \item \claim{check if Goodfire used SAEs}: Yes. Bhalla et al.\ (Goodfire)
+    train five SAE types (standard, JumpReLU, TopK, BatchTopK, Matryoshka)
+    on Llama-3.1-8B, layer 19~\cite{bhalla2026saemanifolds}. Manifold
+    steering itself does not use SAEs: it fits a curve through labelled
+    activation centroids~\cite{wurgaft2026manifoldsteering}.
+  \item \claim{SAEBench: what metrics to use}: all eight score individual
+    features or the SAE as a whole under the linear view; none measures
+    whether a \emph{group} of features forms a manifold. For this topic,
+    Core and RAVEL are the most useful as sanity checks; the
+    manifold-specific evaluation has to come from
+    \textcite{bhalla2026saemanifolds} and MAxBench~\cite{karvonen2025saebench,appapogu2026maxbench}.
+  \item \claim{MAxBench: how do they find/measure the geometries}: ten
+    localization methods (DiffMean-r1, ReFT-r1, DiffMean, Linear Probe,
+    Schatten Probe, PCA, Factor Analysis, SAE, MFA, spline fitting) recover
+    the representation; the benchmark then samples points from it, steers
+    with them and scores the generated text for exclusivity (concept
+    score) and completeness (diversity score)~\cite{appapogu2026maxbench}.
+\end{itemize}
+
+% ===========================================================================
+\section{Claude's Ideas Outside the Exposé}\label{sec:ideas}
+\begin{itemize}
+  \item \textbf{Two-tier benchmark (\note{Ideas.md}) as a by-product.} The
+    synthetic tier already exists as the manifold zoo of
+    \textcite{bhalla2026saemanifolds}. Instead of a new benchmark, the
+    thesis could evaluate its discovery stage on that zoo and its steering
+    stage on MAxBench, then report recall on a small catalogue of known
+    manifolds in Llama (the real-model tier).
+  \item \textbf{Intrinsic interpretability (\note{Ideas.md}).} The idea of
+    forcing activations into geometric shapes during training matches the
+    \enquote{intrinsic interpretability} branch of
+    \textcite{bereska2024review}. It is a separate thesis topic and does
+    not fit the current one; keep it for later.
+\end{itemize}
+
+\printbibliography[heading=bibintoc,title={References}]
+
+\end{document}

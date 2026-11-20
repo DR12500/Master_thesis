@@ -1,0 +1,32 @@
+# Personal documents (ID scan, admission letter) - never publish
+Anmeldung/
+
+# Third-party repos cloned for experiments (have their own git history + venvs)
+causalab/
+representation-engineering-repo/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bbl-SAVE-ERROR
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+
+# OS
+Thumbs.db
+.DS_Store

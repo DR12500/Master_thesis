@@ -1,0 +1,252 @@
+% ===========================================================================
+%  Exposé -- Master's thesis proposal (REFACTORED VERSION)
+%  Build: save the file in VS Code (LaTeX Workshop runs latexmk + biber).
+%
+%  Structure
+%    0  Title block + Summary
+%    1  Introduction
+%    2  Motivation
+%    3  Mechanistic Interpretability and AI Safety
+%    4  Circuit Discovery, Recurring Patterns and Polytopes
+%    5  Methods, Tools and Benchmarks
+%       (RepE, SAEs, TDA, Fourier decomposition, Benchmarks)
+%    6  Implications for a Thesis
+%       References                      (from references.bib)
+%
+%  LaTeX cheat sheet: see helpers.tex (separate document, not submitted).
+% ===========================================================================
+
+\documentclass[11pt,a4paper]{article}
+
+% ---------- Encoding, fonts, language ---------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}        % for a German exposé: [ngerman]
+\usepackage{microtype}             % nicer line breaks, slightly tighter text
+\usepackage{csquotes}              % \enquote{...}; recommended with biblatex
+
+% ---------- Page layout -----------------------------------------------------
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{parskip}               % blank line between paragraphs, no indent
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{1.0ex plus .5ex}{0.5ex}
+\titlespacing*{\subsection}{0pt}{0.8ex plus .3ex}{0.3ex}
+\titlespacing*{\paragraph}{0pt}{0.4ex}{0.6em}
+
+% ---------- Content packages ------------------------------------------------
+\usepackage{amsmath,amssymb}       % maths
+\usepackage{graphicx}              % \includegraphics
+\usepackage{booktabs}              % \toprule, \midrule, \bottomrule
+\usepackage[inline]{enumitem}      % compact lists (+ inline lists)
+\setlist{nosep,leftmargin=*}
+\usepackage{xcolor}
+
+% ---------- Bibliography ----------------------------------------------------
+\usepackage[backend=biber,style=numeric-comp,sorting=none,
+            maxbibnames=3,giveninits=true,doi=false]{biblatex}
+\addbibresource{references.bib}
+\renewcommand*{\bibfont}{\small}
+% Show the arXiv ID where there is one, otherwise the URL; hide access dates.
+\AtEveryBibitem{%
+  \iffieldundef{eprint}{}{\clearfield{url}}%
+  \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}}
+
+% ---------- Links (load last) -----------------------------------------------
+\usepackage[hidelinks]{hyperref}
+
+% Marker for finished TODOs. To hide all markers before submitting, change
+% the definition to: \newcommand{\didtodo}{}
+\newcommand{\didtodo}{\textbf{\textcolor{blue}{[DID THE TODO]}}\ }
+
+% ---------- Title data ------------------------------------------------------
+\newcommand{\thesistitle}{Geometric Structure in LLM Representations and Its Use for Mechanistic Interpretability}
+\newcommand{\authorname}{Dominik Rittner}
+\newcommand{\supervisor}{Prof.\ Dr.\ Sandipan Sikdar and Tobias Kalmbach, M.\,Sc.}
+\newcommand{\university}{Leibniz University Hannover, Institute of Data Science, Knowledge-Based Systems Group (KBS)}
+
+\hypersetup{pdftitle={Exposé: \thesistitle}, pdfauthor={\authorname}}
+
+\begin{document}
+
+% ===========================================================================
+% 0  Title block (compact instead of \maketitle to save space)
+% ===========================================================================
+\begin{center}
+  {\small\scshape Exposé for a Master's Thesis}\\[0.4ex]
+  {\Large\bfseries \thesistitle}\\[0.8ex]
+  \authorname\\
+  Supervisors: \supervisor\\
+  \university\ \textbullet\ \today
+\end{center}
+
+% \noindent\textbf{Summary.}
+%**IMPORTANT:** Finding a loop in a point cloud only shows correlation. The thesis needs a causal intervention showing the model actually uses the structure.
+% **Additionally**: Highlighting whether underlying geometric patterns are inherent to the data the model was trained on or due to architectural design choices. (**TODO**) Further research needs to be done to investigate if and how well these two cases can be distinguished.
+
+\section{Introduction}
+As machine learning systems become more capable, the demand for understanding their decision-making processes has grown. Mechanistic interpretability is one approach that aims to reverse-engineer the computations inside neural networks, particularly large language models (LLMs).
+This understanding is also a safety concern: tools that monitor or steer a model, for example to detect dishonest answers or to suppress harmful behavior~\cite{zou2023representation}, rely on knowing how the relevant concepts are represented inside the model.
+This exposé proposes to study concepts not as linear directions, but as geometric shapes within a model's internal representations.
+
+\section{Motivation}
+The premise is simple: geometric regularities appear across many scientific domains.
+In \emph{physics}, rotations, orbits and waves are periodic.
+In \emph{chemistry}, the periodic table reflects
+the periodic recurrence of element properties, and molecules (e.g., water) take on characteristic geometric shapes, because these are usually the energetically most stable configurations. In \emph{biology}, DNA coils into a double
+helix for similar reasons. Honeybees build hexagonal cells, and many plants arrange leaves in
+Fibonacci spirals. These are just a few examples of recurring patterns in the
+world.
+% \paragraph{Sidenote:}
+Whether these regularities are inherent features of reality itself or partly a product of the human desire to find structure and laws in a chaotic world is a philosophical question for now.
+
+Either way, they are reflected in human-generated data, which motivates searching for geometric regularities in the internal representations of LLMs trained on such data.
+Given the high dimensionality of modern neural networks and the well-known problem of polysemantic neurons (explained by the superposition hypothesis~\cite{elhage2022toy}), it is plausible that further, not yet discovered geometric patterns exist, such as curved, low-dimensional manifolds embedded in the high-dimensional activation space.
+Such patterns might also reveal previously unknown safety issues (e.g., backdoors~\cite{fay2026shape}), which gives the thesis a second motivation.
+
+\paragraph{Challenges and scope.}
+Discovering such geometric patterns is not a trivial task. The thesis will need to carefully distinguish between three possible sources of a pattern: (1) the training data, (2) the architecture and training process, and (3) the analysis method used to detect it.
+% (**TODO**) Further research needs to be done to investigate if and how well these two cases can be distinguished.
+
+\paragraph{Where to start.}
+A first way to separate them is to compare a trained model with a randomly initialized model of the same architecture, to compare models of different architectures trained on similar data, and to test the results of the analysis against null baselines such as random sparse autoencoders (SAEs)~\cite{korznikov2026sanity}.
+This distinction is also relevant for safety, since structure produced by the analysis method can create false confidence in what a model does.
+Given recent advances in mechanistic interpretability and the availability of various tools and benchmarks, the thesis aims to explore these geometric patterns and their implications for understanding LLMs. The goal is to gain insights into the internal workings of these models and thereby improve their interpretability and safety.
+
+\section{Mechanistic Interpretability and AI Safety}
+% TODO rewrite the folling two paragraphs to fit together better
+% \didtodo
+\paragraph{Features as directions.}
+\textcite{bereska2024review} survey the relatively new field of mechanistic interpretability, which aims to give insight into the underlying mechanisms of neural networks, and of LLMs in particular.
+They organize the field around four key concepts: defining features, representation, computation and emergence. Within these concepts, they introduce five hypotheses: linearity, superposition, universality, simulation and prediction orthogonality.
+Covering all of them in detail is beyond the scope of this exposé, but together they provide a solid foundation for understanding the field.
+One of these ideas is the \emph{linear representation
+hypothesis}: a concept corresponds to a direction in activation space~\cite{park2024linear}.
+
+\paragraph{The problem with linearity and SAEs.}
+While the linear representation hypothesis is a helpful simplification, \textcite{bereska2024review} point out that there is growing evidence against it: some features, such as the days of the week, are arranged in a circle~\cite{engels2025notall,wurgaft2026manifoldsteering}, and a
+production model tracks character counts on low-dimensional curved manifolds
+that are discretized by families of sparse features~\cite{gurnee2025manifolds}.
+SAEs capture these shapes poorly: they fragment one manifold across many
+local features, so the shape is rarely visible from any
+single feature~\cite{bhalla2026saemanifolds}.
+
+\paragraph{Superposition and the choice of basis.}
+Individual neurons are only meaningful units of analysis if the architecture
+singles out their directions, i.e., if the basis is \emph{privileged}, as for
+neurons following an element-wise non-linearity~\cite{elhage2022toy}. Even then,
+neurons are often \emph{polysemantic}, which the superposition hypothesis explains by networks storing more
+features than they have neurons~\cite{elhage2022toy,bereska2024review}.
+
+\section{Circuit Discovery, Recurring Patterns and Polytopes}
+As mentioned earlier, recent research shows that some concepts, such as the days of the week or numbers in modular arithmetic, are represented in a circular shape~\cite{engels2025notall,bereska2024review}. Discovering such shapes is challenging, and it raises several questions.
+
+
+% @AI this comment should stay, because it contains an idea on how to explore
+% Maybe one RQ would be to simply come up with a new Benchmark, (or) building on existing ones, that is specifically designed to find geometric patterns in the activation space of LLMs. 
+\begin{itemize}
+  \item How can we find circular shapes in the activation space in the first place? (This has mostly been answered, but it is still important for the thesis.)
+  \item How can we verify that they are actually used by the model?
+  \item Do other shapes (polytopes) exist that are embedded in \textbf{higher} dimensions and are therefore harder for humans to find?
+  \item If so, how can we find them? What tools can we use?
+\end{itemize}
+
+These questions are highly relevant for the thesis and will probably define its core research questions. To tackle them, it is reasonable to build on existing methods, tools and benchmarks.
+
+\section{Methods, Tools and Benchmarks}
+The following section gives a brief overview of available interpretability tools that might be used in the thesis. Further research is needed to determine which of these tools and concepts are most suitable, and the thesis will most likely also use tools that are not mentioned here.
+\subsection{Representation Engineering}
+% \label{sec:repe}
+% TODO Your RepE description: Zou et al. present representation engineering as a "top-down approach to AI transparency." Calling it "an alternative to RLHF" goes further than their framing. "By moving during inference time" also seems to be missing an object; you probably mean shifting the activations along the vector.
+% \didtodo
+Representation engineering~\cite{zou2023representation} is a top-down approach to AI transparency that studies concepts at the level of whole representations rather than single neurons or circuits. Its method consists of two parts:
+\begin{itemize}
+    \item In \textbf{representation reading}, concepts such as honesty, morality, risk and power-seeking are located as measurable directions or geometric patterns in the activation space, which turns, e.g., honesty into an extractable numeric vector.
+    \item In \textbf{representation steering}, the extracted vector is used to change the model's behavior by shifting the activations along it at inference time, e.g., to make the model more honest.
+\end{itemize}
+Both ideas assume that a concept such as honesty can be captured by a single direction. If it is instead represented as a curved shape, reading along one direction captures only part of it, and steering along that direction can push the activations off the shape.
+
+\subsection{Sparse Autoencoders}
+While SAEs are a popular tool for mechanistic interpretability, they have limitations.
+Even their evaluation is contested: frozen, randomly initialized SAEs
+match trained ones on standard metrics~\cite{korznikov2026sanity}.
+The same work found that, on synthetic data with known ground-truth features, SAEs recover only 9\% of the true features despite good reconstruction.
+% SAEs also lost to linear probes on a safety-relevant task~\cite{gdm2025negative}, and for
+% steering, simple supervised baselines beat SAEs~\cite{wu2025axbench}, although
+% better feature selection narrows the gap~\cite{arad2025steering}. Methods
+% that \emph{do} find manifolds are supervised: they need concept labels or a
+% hypothesised target geometry~\cite{modell2026probing,tiblias2026smds}, and
+% benchmarks currently cover only ordered concepts such as days or
+% years~\cite{appapogu2026maxbench}.
+
+Despite their many flaws, SAEs remain a popular tool and might help in capturing curved geometry. \textcite{bhalla2026blog} illustrate this with an analogy: \enquote{We are reminded of the old proverb in which blind men encounter an elephant for the first time. Each touches a different part---the trunk, the tusk, the leg---and each comes to a different conclusion about the elephant [\dots]}.
+In short, SAEs are a useful tool for mechanistic interpretability, but the literature also calls for better methods that can capture curved geometry more reliably.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Topological Data Analysis}
+% TODO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In mechanistic interpretability, topological data analysis (TDA) is a useful tool for understanding the structure of high-dimensional data. Its main framework, persistent homology, searches for features that persist along a multi-scale filtration. Different filtration methods have been studied in the past few years, each with its own advantages and disadvantages~\cite{gardinazzi2024persistent}.
+This makes TDA particularly useful for analyzing the shape of data, as it captures topological features such as loops.
+As mentioned before, \textcite{engels2025notall} found that the days of the week are represented in a circular shape in LLMs. TDA could test whether such a loop is a persistent feature of the data rather than a product of the analysis method. In addition, the TDA method Mapper generates graph representations that cover a dataset well and has been used to explore the activations of neural networks~\cite{rathore2021topoact}.
+Utilizing graph representations might be a good way of discovering hidden (higher-dimensional) patterns.
+For TDA, tools like giotto-tda~\cite{tauzin2021giotto} would be a starting point.
+
+\subsection{Fourier Decomposition}
+Fourier decomposition is a mathematical method that breaks down a complex or irregular signal, function, or time series into a sum of simpler, harmonically related sine and cosine waves (or complex exponentials).
+It can be a useful tool for mechanistic interpretability, as it can help identify periodic patterns in the activations of neural networks~\cite{feucht2026arithmetic}. However, Fourier decomposition is also an excellent example of a tool that may find patterns where there are none. It can help find regularities, but to distinguish real periodicity from patterns produced by the method itself, careful analysis has to be done.
+
+\subsection{Benchmarks}
+% \subsubsection{Ground-Truth and Circuit Discovery Benchmarks}
+\paragraph{Disclaimer:} For this section, the focus was mainly on quantitatively covering what benchmarks exist in the field of mechanistic interpretability. Some of these are more focused on the safety aspect, while others focus more on finding curved manifolds in the activation space (geometric patterns). For this reason, each of these benchmarks is only briefly covered.
+\begin{itemize}
+  \item \textbf{InterpBench}~\cite{gupta2024interpbench}: A collection of 86 (85 SIIT plus one trained on GPT-2) semi-synthetic yet realistic transformers
+with known circuits for evaluating mechanistic interpretability techniques. The benchmark is built on top of Tracr~\cite{lindner2023tracr}, a compiler that translates human code written in RASP into transformer weights; the models are then trained with SIIT to make them more realistic. It can be freely accessed and downloaded from Hugging Face.
+
+  \item \textbf{MIB}~\cite{mueller2025mib}: A standardized, multi-model evaluation framework designed to benchmark circuit localization (finding subgraphs) and causal variable localization (aligning neural features with concepts using metrics like Interchange Intervention Accuracy).
+
+% \end{itemize}
+% % \subsubsection{Feature Disentanglement and Dictionary Learning Benchmarks}
+
+% \begin{itemize}
+  \item \textbf{MAxBench}~\cite{appapogu2026maxbench}: A geometry-agnostic benchmark for recovering multinomial concepts, i.e., concepts with many values and subcategories such as animals or countries. It compares 10 localization methods covering five types of geometry (from single directions via affine subspaces to manifolds) across six concepts and four models, judging each recovered representation by steering along it.
+  % Affine subspaces turn out to steer more reliably than single directions or linear subspaces, and manifold steering is competitive where it applies; however, no method consistently beats simple prompting.
+
+  \item \textbf{AxBench}~\cite{wu2025axbench}: A large-scale benchmark that compares prompting, finetuning and representation-based methods (e.g., SAEs, linear probes and steering vectors) on two tasks, concept detection and steering, using Gemma-2 models.
+  % Prompting steers best, followed by finetuning, while simple representation-based methods such as difference-in-means are best at concept detection; SAEs are not competitive on either task.
+  % Since all compared representation methods are linear, AxBench is a natural testbed for checking whether geometry-aware steering (Direction 1b) can close the gap to prompting.
+
+  \item \textbf{SAEBench}~\cite{karvonen2025saebench}: A benchmark that evaluates SAEs on language models with eight metrics, covering interpretability, feature disentanglement, concept detection, reconstruction and practical applications such as unlearning.
+  This broad coverage makes it possible to compare new training methods, tune hyperparameters and choose the most suitable SAE for a given task.
+  Importantly, the authors find that improvements on common proxy metrics (sparsity and reconstruction) do not reliably carry over to practical performance.
+  % ; Matryoshka SAEs, for instance, score slightly worse on these proxies but clearly better on feature disentanglement, an advantage that grows with SAE size.
+  % % (\href{https://arxiv.org/abs/2503.09532}{paper},
+  % \href{https://github.com/adamkarvonen/SAEBench}{code}).
+
+  \item \textbf{SynthSAEBench}~\cite{chanin2026synthsaebench}: A benchmark that evaluates SAEs on synthetic data with realistic feature characteristics, including correlation, hierarchy and superposition. It does this by implementing a comprehensive set of metrics organized into four categories: reconstruction quality, feature recovery, classification accuracy and sparsity.
+  % (\href{https://arxiv.org/abs/2602.14687}{paper}).
+
+  % \item \textbf{RAVEL: Resolving Attribute--Value Entanglements in Language
+  % Models}~\cite{huang2024ravel}
+  % (\href{https://arxiv.org/abs/2402.17700}{paper},
+  % \href{https://github.com/explanare/ravel}{code}).
+\end{itemize}
+
+\section{Implications for a Thesis}
+A geometric method is timely, but to be convincing it must
+\begin{enumerate*}[label=(\alph*)]
+  \item beat simple baselines~\cite{wu2025axbench},
+  \item pass random-baseline sanity checks~\cite{korznikov2026sanity}, and
+  \item show that the model actually \emph{uses} the structure, via a causal
+        intervention~\cite{wurgaft2026manifoldsteering}.
+\end{enumerate*}
+For safety, the last point matters most: a shape that the model does not use cannot be relied on to monitor or steer it.
+
+With this in mind, this exposé presents two directions for the thesis (the first in two variants), each with a focus on discovering geometric patterns in LLMs.
+\begin{itemize}
+  \item \textbf{Direction 1a: Strong focus on geometry.} Uncovering previously hidden patterns in human-generated data and their effects on the activation space of LLMs.
+  \item \textbf{Direction 1b: How geometry can help with safety.} Using discovered geometric patterns to improve the interpretability and safety of LLMs.
+  \item \textbf{Direction 2: The geometry of artificial emotions.} How sentiment is represented in LLMs and why it matters for misaligned behavior. For this direction, the thesis will need to explore the geometric representation of sentiment and its implications for model behavior. This exposé has not put much emphasis on this direction, but there is growing evidence that emotions are also represented geometrically in LLMs, for example on a circle spanned by valence and arousal~\cite{sun2026valence,bigelow2026stories}.
+\end{itemize}
+
+\printbibliography[heading=bibintoc,title={References}]
+
+\end{document}

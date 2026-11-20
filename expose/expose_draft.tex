@@ -1,0 +1,367 @@
+% ===========================================================================
+%  Exposé -- Master's thesis proposal: BULLET-POINT DRAFT
+%  Build: save the file in VS Code; it builds expose_draft.pdf (colours,
+%  draft legend, TODO markers).
+%  The written-out version is expose_written.tex; it builds the PDF to hand
+%  in (expose_Dominik_Rittner.pdf).
+%
+%  Structure
+%    0  Title block + Summary
+%    1  Introduction                    (text kept as is, suggestions as comments)
+%    2  Motivation                      (text kept as is, suggestions as comments)
+%    3  Background: From Directions to Manifolds
+%    4  Methods: Finding and Using Neural Geometry
+%    5  Evaluation and Benchmarks
+%    6  Research Gap and Proposed Thesis (unsupervised manifold steering)
+%    7  Work Plan                       
+%       References                      (from references.bib)
+%
+%  Draft colour code (sections 3--6 are bullet points, not final text):
+%    black  = from the Structure.md reading notes (Foundations, Origins,
+%             Methods, Benchmarks)
+%    \fromextra{} (blue)  = from the papers but NOT in the notes, or from
+%             papers that are not in the notes at all
+%    \fromnotes{} (green) = from other notes in the Obsidian vault
+%    \fromold{} (purple)  = moved here from old_expose.tex
+%    \fromclaude{} (orange) = added by Claude after a USER tag (suggestions
+%             and ideas you approved). To accept it, delete the wrapper.
+%  Errors found in the notes and ratings of the terminology notes are in
+%  markdown_review.pdf (separate document).
+%
+% ---------------------------------------------------------------------------
+%  WORKING WITH CLAUDE
+% ---------------------------------------------------------------------------
+%  Comment markers
+%    %>> CLAUDE COMMENT: ...  Claude's comments (suggestions, ideas,
+%                             answers).
+%    %>>   ...                Every further line of the same Claude comment
+%                             starts with "%>>", so the block is easy to
+%                             spot.
+%    % USER: ...              Your comments and tags (first line only;
+%                             any further lines are plain "%").
+%
+%  Layout rules
+%    - At least one blank line between a Claude comment and a USER comment.
+%    - At least one blank line between LaTeX code and any comment block.
+%    - A Claude answer goes BELOW the USER comment it answers.
+%
+%  Tags: write "% USER: <TAG>" below the comment block it refers to.
+%  Free text after the tag is allowed, e.g.
+%  "% USER: APPLY as a bullet point in Section 5".
+%    APPLY        (old name: OK_DO_IT) Do what the Claude comment above
+%                 suggests. New text is wrapped in \fromclaude{} (orange).
+%                 Both the Claude comment and the USER line are removed.
+%    EXPLAIN      Claude adds a "%>> CLAUDE COMMENT:" answer below the USER line
+%                 and changes nothing else. Reply with another tag after.
+%    DROP         Delete the Claude comment above and the USER line. No
+%                 change to the text.
+%    TO_NOTES     Move the content above into a fitting Obsidian note and
+%                 delete it here (Claude says which note in the chat).
+%    CHECK        Verify the claim or citation above against the source.
+%                 Fix it if it is wrong; report the result in the chat.
+%    REWORD       Claude may rephrase the text above (otherwise Claude
+%                 only fixes errors and citations, never your wording).
+%    LATER        Parked. Claude leaves it untouched.
+%  Any other "% USER: ..." text is read as a free-form instruction.
+% ---------------------------------------------------------------------------
+%
+%  LaTeX cheat sheet: see helpers.tex (separate document, not submitted).
+% ===========================================================================
+
+\documentclass[11pt,a4paper]{article}
+
+% ---------- Encoding, fonts, language ---------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}        % for a German exposé: [ngerman]
+\usepackage{microtype}             % nicer line breaks, slightly tighter text
+\usepackage{csquotes}              % \enquote{...}; recommended with biblatex
+
+% ---------- Page layout -----------------------------------------------------
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{parskip}               % blank line between paragraphs, no indent
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{1.0ex plus .5ex}{0.5ex}
+\titlespacing*{\subsection}{0pt}{0.8ex plus .3ex}{0.3ex}
+\titlespacing*{\paragraph}{0pt}{0.4ex}{0.6em}
+
+% ---------- Content packages ------------------------------------------------
+\usepackage{amsmath,amssymb}       % maths
+\usepackage{graphicx}              % \includegraphics
+\usepackage{booktabs}              % \toprule, \midrule, \bottomrule
+\usepackage[inline]{enumitem}      % compact lists (+ inline lists)
+\setlist{nosep,leftmargin=*}
+\usepackage{xcolor}
+
+% ---------- Bibliography ----------------------------------------------------
+\usepackage[backend=biber,style=numeric-comp,sorting=none,
+            maxbibnames=3,giveninits=true,doi=false]{biblatex}
+\addbibresource{references.bib}
+\renewcommand*{\bibfont}{\small}
+% Show the arXiv ID where there is one, otherwise the URL; hide access dates.
+\AtEveryBibitem{%
+  \iffieldundef{eprint}{}{\clearfield{url}}%
+  \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}}
+
+% ---------- Links (load last) -----------------------------------------------
+\usepackage[hidelinks]{hyperref}
+
+% ---------- Draft or hand-in version (see header) ---------------------------
+% \ifdraft is true only when the output is named expose_draft.
+\newif\ifdraft
+\edef\draftjob{\detokenize{expose_draft}}
+\edef\thisjob{\jobname}
+\ifx\thisjob\draftjob \drafttrue \else \draftfalse \fi
+
+\ifdraft
+  % Marker for finished TODOs.
+  \newcommand{\didtodo}{\textbf{\textcolor{blue}{[DID THE TODO]}}\ }
+  % Visible open TODO.
+  \newcommand{\todo}[1]{\textbf{\textcolor{red}{[TODO: #1]}}}
+  % Draft colour code (see header).
+  \newcommand{\fromextra}[1]{\textcolor{blue}{#1}}
+  \newcommand{\fromnotes}[1]{\textcolor{green!50!black}{#1}}
+  \newcommand{\fromold}[1]{\textcolor{violet}{#1}}
+  \newcommand{\fromclaude}[1]{\textcolor{orange!85!black}{#1}}
+\else
+  % Hand-in version: markers hidden, everything in black.
+  \newcommand{\didtodo}{}
+  \newcommand{\todo}[1]{\ifhmode\unskip\fi} % drops the space before it
+  \newcommand{\fromextra}[1]{#1}
+  \newcommand{\fromnotes}[1]{#1}
+  \newcommand{\fromold}[1]{#1}
+  \newcommand{\fromclaude}[1]{#1}
+\fi
+
+% ---------- Title data ------------------------------------------------------
+% Previous title: Geometric Structure in LLM Representations and Its Use
+% for Mechanistic Interpretability
+\newcommand{\thesistitle}{Unsupervised Manifold Steering: Discovering and Navigating Concept Manifolds in LLMs without Labels}
+\newcommand{\authorname}{Dominik Rittner}
+\newcommand{\supervisor}{Prof.\ Dr.\ Sandipan Sikdar and Tobias Kalmbach, M.\,Sc.}
+\newcommand{\university}{Leibniz University Hannover, Institute of Data Science, Knowledge-Based Systems Group (KBS)}
+
+\hypersetup{pdftitle={Exposé: \thesistitle}, pdfauthor={\authorname}}
+
+\begin{document}
+
+% ===========================================================================
+% 0  Title block (compact instead of \maketitle to save space)
+% ===========================================================================
+\begin{center}
+  {\small\scshape Exposé for a Master's Thesis}\\[0.4ex]
+  {\Large\bfseries \thesistitle}\\[0.8ex]
+  \authorname\\
+  Supervisors: \supervisor\\
+  \university\ \textbullet\ \today
+\end{center}
+
+% Draft legend -- only in the draft PDF.
+\ifdraft
+{\small\noindent\textit{Draft legend:} black = Structure.md reading notes;
+\fromextra{blue = from the papers, not in the notes};
+\fromnotes{green = other notes in the vault};
+\fromold{purple = moved from old\_expose.tex};
+\fromclaude{orange = added by Claude after your approval}.\par}
+\fi
+
+
+%>> CLAUDE COMMENT: Open from the red-line proposal (not applied yet):
+%>>   start each section with one plain sentence saying what it does,
+%>>   e.g. "This section reviews how concept manifolds are found today and
+%>>   why existing methods need labels." -> USER: APPLY or USER: DROP.
+
+
+\section{Introduction}
+As machine learning systems become more capable, the demand for understanding their decision-making processes has grown. Mechanistic interpretability is one approach that aims to reverse-engineer the computations inside neural networks, particularly large language models (LLMs).
+This understanding is also a safety concern: tools that monitor or steer a model, for example to detect dishonest answers or to suppress harmful behavior~\cite{zou2023representation}, rely on knowing how the relevant concepts are represented inside the model \fromclaude{(see Section~\ref{sec:outlook})}.
+This exposé proposes to study concepts not as linear directions, but as geometric shapes within a model's internal representations.
+\fromclaude{Concretely, the goal is to find such concept manifolds without labels and to steer the model along them, since steering along a straight line can fail on curved concepts (Sections~\ref{sec:steering} and~\ref{sec:thesis}).}
+\section{Motivation}
+The premise is simple: geometric regularities appear across many scientific domains.
+In \emph{physics}, rotations, orbits and waves are periodic.
+In \emph{chemistry}, the periodic table reflects
+the periodic recurrence of element properties, and molecules (e.g., water) take on characteristic geometric shapes, because these are usually the energetically most stable configurations. In \emph{biology}, DNA coils into a double
+helix for similar reasons. Honeybees build hexagonal cells, and many plants arrange leaves in
+Fibonacci spirals. These are just a few examples of recurring patterns in the
+world.
+Whether these regularities are inherent features of reality itself or partly a product of the human desire to find structure and laws in a chaotic world is a philosophical question for now.
+
+Either way, they are reflected in human-generated data, which motivates searching for geometric regularities in the internal representations of LLMs trained on such data.
+Given the high dimensionality of modern neural networks and the well-known problem of polysemantic neurons (explained by the superposition hypothesis~\cite{elhage2022toy}), it is plausible that further, not yet discovered geometric patterns exist, such as curved, low-dimensional manifolds embedded in the high-dimensional activation space\fromclaude{~\cite{engels2025notall,modell2025origins,gurnee2025manifolds}}.
+% Such patterns might also reveal previously unknown safety issues (e.g., backdoors~\cite{fay2026shape})\fromclaude{, or allow more precise steering of safety-relevant behavior such as refusal or sycophancy, which manifold steering names as future work~\cite{wurgaft2026manifoldsteering}}, which gives the thesis a second motivation.
+
+\paragraph{Challenges and scope.}
+Discovering such geometric patterns is not a trivial task. The thesis will need to carefully distinguish between three possible sources of a pattern: (1) the training data, (2) the architecture and training process, and (3) the analysis method used to detect it \fromclaude{(for (1) and (2), see Section~\ref{sec:origins})}.
+
+\paragraph{Where to start.}
+A first way to separate them is to compare a trained model with a randomly initialized model of the same architecture, to compare models of different architectures trained on similar data, and to test the results of the analysis against null baselines such as random sparse autoencoders (SAEs)~\cite{korznikov2026sanity}.
+% This distinction is also relevant for safety, since structure produced by the analysis method can create false confidence in what a model does.
+% \fromclaude{Building on recent methods and benchmarks, the thesis aims to discover such manifolds without labels and to test, by steering along them, whether the model actually uses them. This would make interpretability tools less dependent on human-chosen labels and improve their safety value.}
+
+% ===========================================================================
+% 3  Background (Structure.md: Foundations + Origins)
+% ===========================================================================
+\section{Background: From Directions to Manifolds}
+
+\subsection{What Neural Geometry Is}
+\begin{itemize}
+  \item \fromold{The field is organized around four concepts (defining features, representation, computation, emergence) and five hypotheses (linearity, superposition, universality, simulation, prediction orthogonality)~\cite{bereska2024review}.}
+  \item \fromold{Neurons are only meaningful units if the basis is \emph{privileged} (e.g., after an element-wise non-linearity); even then they are often polysemantic, which superposition explains~\cite{elhage2022toy,bereska2024review}; methods that use only distances between activations, such as Isomap (Section~\ref{sec:thesis}), do not depend on the choice of basis.}
+  \item Linear representation hypothesis: a concept is a direction in activation space~\cite{park2024linear}. SAEs are built on this view: they invert the hypothesis read as a generative model of activations~\cite{bhalla2026saemanifolds}.
+  \item Not all features are one-dimensional: days of the week and months form circles in GPT-2 and Mistral~7B~\cite{engels2025notall}.
+  \item \emph{Irreducible} multi-dimensional feature: cannot be split into independent or non-co-occurring lower-dimensional features~\cite{engels2025notall}.
+  \item \fromextra{The circles are used: interventions in Mistral~7B and Llama~3~8B show them to be the unit of computation for modular arithmetic on days and months~\cite{engels2025notall}.}
+  \item Goodfire frame: geometry is the \enquote{data structure} of a network; full understanding needs representations, computations and behavior~\cite{goodfire2026world}.
+  \item Example: in a world model, steering along a fitted 1D manifold moves a car smoothly; ignoring the curvature pushes the model into incoherent states~\cite{goodfire2026world}.
+  \item Features as metric spaces (atomic, hierarchical, continuous). If (H1) features and representations correspond continuously and one-to-one, and (H2) cosine similarity reflects feature distance, then on-manifold path lengths equal feature path lengths up to a constant factor~\cite{modell2025origins}.
+  \item \fromextra{Also in a production model: Claude~3.5~Haiku tracks character counts on curved low-dimensional manifolds, discretized by families of sparse features; confirmed by causal interventions~\cite{gurnee2025manifolds}.}
+\end{itemize}
+
+\subsection{Where Neural Geometry Comes From}\label{sec:origins}
+\begin{itemize}
+  \item Translation symmetry in word co-occurrence (e.g., how often two months co-occur depends only on the time between them) produces Fourier, i.e.\ circular, geometry. Derived analytically for word embeddings; the predictions carry over to LLMs~\cite{karkada2026symmetry}.
+  \item The geometry is robust: \fromextra{it survives even when, e.g., all sentences in which two months co-occur are removed}; explained by a latent variable shared by many words (a collective effect)~\cite{karkada2026symmetry}.
+  \item Superposition view: in \fromclaude{Bag-of-Words Superposition (BOWS), a controlled setting where an autoencoder compresses bag-of-words vectors of real text,} correlated features can interfere constructively instead of acting as noise; this produces semantic clusters and cycles. The month circle is already visible in a PCA of the raw data~\cite{prieto2026correlations}.
+  \item Training choices matter: these solutions appear mainly under tight bottlenecks or weight decay~\cite{prieto2026correlations}.
+  \item Presence-coding (\enquote{is this token \emph{cat}?}) vs.\ value-coding (an angle or coordinate is linearly decodable) features; value-coding explains structure even without correlations~\cite{prieto2026correlations}.
+  \item \fromnotes{Cheap tests for the source of a shape could be: a randomly initialized model; co-occurrence statistics (e.g., PMI) of the concept tokens~\cite{karkada2026symmetry,prieto2026correlations}; Pythia checkpoints~\cite{biderman2023pythia}; a transformer vs.\ a state-space model such as Mamba~\cite{gu2023mamba}.} \fromclaude{For source (3), the method itself:} \fromold{Fourier decomposition can reveal periodic structure in activations~\cite{feucht2026arithmetic}, but it can also find periodicity where there is none, so results need careful controls.}
+\end{itemize}
+
+% ===========================================================================
+% 4  Methods (Structure.md: Methods)
+% ===========================================================================
+\section{Methods: Finding and Using Neural Geometry}
+
+\subsection{Sparse Autoencoders and Concept Manifolds}
+\begin{itemize}
+  \item First discovery method: cluster SAE dictionary elements by decoder cosine similarity~\cite{engels2025notall}. Its authors found few interpretable multi-dimensional features and were unsure why~\cite{engels2025notall}.
+  \item SAEs can capture a manifold \emph{globally} (a compact group of atoms spans it) or \emph{locally} (\emph{tiling}: localized features with overlapping support). Tiling comes as \emph{shattering} (nearly disjoint active sets) or \emph{dilution} (overlapping, but no compact group)~\cite{bhalla2026saemanifolds}.
+  \item In practice SAEs dilute manifolds, so a manifold is rarely visible in a single feature~\cite{bhalla2026saemanifolds}.
+  \item Low reconstruction error alone does not guarantee coherent manifold recovery (feature splitting and redundancy)~\cite{bhalla2026saemanifolds}.
+  \item Discovery: decoder cosine similarity fails; Ising couplings and conditional co-activation recover manifold groups. Membership is a \emph{functional} property (which atoms co-activate), not a geometric one (where atoms point)~\cite{bhalla2026saemanifolds}.
+  \item Synthetic ground truth: a \enquote{zoo} of \fromextra{eight manifold types (circles, spheres, tori, Möbius strips, Swiss rolls, helices, disks, segments)} in superposition~\cite{bhalla2026saemanifolds}.
+  \item \fromextra{On Llama-3.1-8B SAEs: known manifolds (colors, days, years, age, geography, \dots) plus a new one for epistemic uncertainty~\cite{bhalla2026saemanifolds}.}
+  \item \fromextra{Null baseline: random SAEs roughly match trained ones on interpretability, probing and editing; on synthetic data SAEs recover only 9\% of true features at 71\% explained variance~\cite{korznikov2026sanity}.}
+  \item \fromnotes{Analogy: like the blind men and the elephant, each line gives only a partial view of a curved shape~\cite{bhalla2026blog}.}
+\end{itemize}
+
+\subsection{Beyond SAEs: Local Geometry}
+\begin{itemize}
+  \item Mixture of Factor Analyzers (MFA): models activation space as Gaussian regions, each a centroid plus local low-dimensional variation; unsupervised~\cite{shafran2026regions}.
+  \item \fromextra{Trained on Llama-3.1-8B and Gemma-2-2B; beats unsupervised baselines on localization and steering, competitive with supervised methods, often steers better than SAEs~\cite{shafran2026regions}.}
+  \item \fromclaude{MFA is therefore a strong unsupervised baseline and a possible starting point for the grouping step (Section~\ref{sec:thesis}).}
+  \item \fromextra{SMIXAE: a sparse mixture of autoencoders that learns multi-dimensional structure directly instead of regrouping SAE features afterwards (Gemma~2 2B/9B); early workshop paper, no steering yet~\cite{francel2026smixae}.}
+\end{itemize}
+
+\subsection{Topology}
+\begin{itemize}
+  \item \fromold{Persistent homology finds features (e.g., loops) that persist across a multi-scale filtration; several filtrations have been studied for LLMs~\cite{gardinazzi2024persistent}.}
+  \item \fromold{It could test whether a loop such as the weekday circle~\cite{engels2025notall} is a persistent feature rather than an artifact of the method.}
+  \item \fromold{giotto-tda would be a starting toolkit~\cite{tauzin2021giotto}.}
+\end{itemize}
+
+\subsection{Manifold Steering}\label{sec:steering}
+\begin{itemize}
+  \item \fromold{Representation engineering: \emph{reading} locates concepts such as honesty as directions in activation space; \emph{steering} shifts activations along the extracted vector at inference time~\cite{zou2023representation}.}
+  \item \fromold{Both assume a concept is a single direction. If it is curved, reading captures only part of it and steering can push activations off the shape~\cite{wurgaft2026manifoldsteering}.}
+  \item Fit an activation manifold $M_h$ and a behavior manifold $M_y$ (over output distributions). Geodesic distances on the two align (scaled isometry); Euclidean distances do not~\cite{wurgaft2026manifoldsteering}.
+  \item Linear steering cuts through the manifold's interior and \enquote{teleports} between non-adjacent values; manifold steering moves smoothly (Monday $\to$ Tuesday $\to$ Wednesday)~\cite{wurgaft2026manifoldsteering}.
+  \item Two geometries: \emph{density} (from activations) and \emph{pullback} (from outputs, through the Jacobian). Both give approximately the same paths, so $M_h$ and $M_y$ are two images of one conceptual geometry~\cite{wurgaft2026manifoldsteering}.
+  \item Steering becomes the choice of a geometry, not of a direction~\cite{wurgaft2026manifoldsteering}.
+  \item \fromnotes{The manifolds are fit with ground-truth labels (weekdays, months, letters, ages, in-context grids and cylinders, Llama~3.1~8B)}; \fromextra{the authors call for an unsupervised protocol and an operator to navigate the manifold, which is where the idea for this thesis enters~\cite{wurgaft2026manifoldsteering}.}
+  \item \fromextra{Naturalness (energy along the output path, lower is better): e.g., 0.34 for manifold vs.\ 0.93 for linear steering on weekdays~\cite{wurgaft2026manifoldsteering}.}
+\end{itemize}
+
+% ===========================================================================
+% 5  Benchmarks (Structure.md: Benchmarks)
+% ===========================================================================
+\section{Evaluation and Benchmarks}
+\begin{itemize}
+  \item AxBench: concept detection and steering for binary concepts~\cite{wu2025axbench}. \fromextra{Prompting steers best; difference-in-means detects best; SAEs are not competitive on either task~\cite{wu2025axbench}.}
+  \item MAxBench: multinomial concepts, geometry-agnostic\fromclaude{; six concepts, four models}~\cite{appapogu2026maxbench}.
+  \begin{itemize}
+    \item \fromclaude{Scoring:} samples from a recovered geometry and checks \emph{exclusivity} (only valid concept instances) and \emph{completeness} (all values covered); score: harmonic mean of concept, fluency, instruction and diversity.
+    \item \fromclaude{Results:} affine subspaces steer best, mostly due to the offset; manifold steering is competitive where applicable; no method beats prompting.
+    \item \fromclaude{Limitation:} the manifold (spline) method only handles ordered concepts \fromnotes{with all values known} \fromextra{(\emph{Days} and \emph{Years} among its six concepts; the main evaluation uses only \emph{Days})}.
+    \item \fromclaude{Relevance: the sampling-based scoring is geometry-agnostic, so unsupervised manifolds can be scored with it directly. A method that works on unordered concepts (e.g., Animals, Countries) would address the benchmark's stated limitation and make RQ4 measurable.}
+  \end{itemize}
+  \item SAEBench: eight metrics, but scores features one at a time~\cite{karvonen2025saebench}. %\todo{read SAEBench and decide which of its eight metrics fit}
+  \begin{itemize}
+    \item Four capabilities: concept detection (sparse probing, feature absorption), interpretability (LLM judge), reconstruction (loss recovered) and feature disentanglement (unlearning, spurious correlation removal, targeted probe perturbation).
+    \item Over 200 SAEs across eight architectures; \fromextra{gains on proxy metrics (the sparsity--fidelity trade-off) do not reliably transfer to practical tasks~\cite{karvonen2025saebench}.}
+  \end{itemize}
+  \item Relation to the Goodfire agenda~\cite{goodfire2026world}: SAEBench evaluates under the linear view~\cite{karvonen2025saebench}; MAxBench and the synthetic manifolds of \textcite{bhalla2026saemanifolds} are geometry-aware~\cite{appapogu2026maxbench}.
+\end{itemize}
+
+
+% ===========================================================================
+% 6  Research gap and thesis (mainly from "unsupervised manifold steering.md")
+% ===========================================================================
+\section{Research Gap and Research Questions}\label{sec:thesis}
+\fromold{A geometric method must (a) beat simple baselines~\cite{wu2025axbench}, (b) pass random-baseline sanity checks~\cite{korznikov2026sanity}, and (c) show via a causal intervention that the model uses the structure~\cite{wurgaft2026manifoldsteering}. For a potential safety application (\fromclaude{Section~\ref{sec:outlook}}), (c) matters most.}
+
+\paragraph{Gap.}
+\begin{itemize}
+  \item \fromold{Several methods that find manifolds are supervised: they need concept labels or a hypothesized target geometry~\cite{modell2026probing,tiblias2026smds}.}
+  \item \fromnotes{Manifold steering is supervised and its authors ask for an unsupervised protocol~\cite{wurgaft2026manifoldsteering}.}
+  \item \fromnotes{Manifolds can be discovered without labels, but discovered manifolds are not steered along~\cite{bhalla2026saemanifolds}.}
+  \item \fromnotes{MAxBench's non-linear method only handles ordered concepts~\cite{appapogu2026maxbench}; label-free steering still needs a concept-token schema~\cite{oozeer2026riemannian}.}
+  \item \fromextra{SMIXAE discovers manifolds without labels but does not steer yet~\cite{francel2026smixae}.}
+  \item \fromnotes{Open gap: discovery from activations alone, then navigation, validated causally.}
+\end{itemize}
+
+\paragraph{Research questions.}
+\begin{enumerate}[label=RQ\arabic*:]
+  \item \fromclaude{Can concept manifolds and their coordinates be recovered from activations without labels, and how do they compare to supervised fits~\cite{wurgaft2026manifoldsteering}?}
+  \item \fromclaude{Do the recovered manifolds survive null tests (randomly initialized model, random SAE~\cite{korznikov2026sanity}), i.e., do they reflect the data rather than the architecture or the method?}
+  \item \fromclaude{How does steering along unsupervised manifolds compare to supervised manifold steering and to linear steering, e.g., on the naturalness score~\cite{wurgaft2026manifoldsteering}?}
+  \item \fromclaude{To what extent does the approach extend to concepts where supervised methods do not apply (unordered concepts, 2D grids)?}
+\end{enumerate}
+
+\fromclaude{The pipeline compares against linear and supervised steering (a), RQ2 provides the null checks (b), and RQ3 the causal test (c).}
+
+
+\paragraph{Pipeline.}
+\fromnotes{Activations $\to$ candidate group (Ising-SAE grouping~\cite{bhalla2026saemanifolds} or a PCA baseline) $\to$ topology via persistent homology~\cite{tauzin2021giotto} $\to$ intrinsic coordinates via Isomap~\cite{tenenbaum2000isomap} or diffusion maps~\cite{coifman2006diffusion} $\to$ steering $\to$ comparison with supervised and linear steering~\cite{wurgaft2026manifoldsteering}.}
+
+\fromclaude{\textbf{One challenge}: coordinates found without labels have no names and no orientation (Isomap is only defined up to rotation and reflection~\cite{tenenbaum2000isomap}). To steer, e.g., from Monday to Wednesday, each point must first be matched to a concept value, for example by decoding it through the model's output.}
+\fromclaude{Risk: the nearest-neighbour graphs behind Isomap can short-circuit on noisy data~\cite{modell2025origins}; diffusion maps~\cite{coifman2006diffusion} serve as a comparison.}
+
+\paragraph{Feasibility.}
+\begin{itemize}
+  \item \fromnotes{Ground truth for evaluation exists from the supervised results (weekdays, months, letters, ages, grids, cylinders)~\cite{wurgaft2026manifoldsteering}; public code (Goodfire \texttt{causalab}, branch \texttt{manifold\_steering}).}
+  \item \fromclaude{Synthetic ground truth for the discovery stage: the manifold zoo of \textcite{bhalla2026saemanifolds}, cheap to generate and usable before moving to Llama.}
+  \item \fromnotes{Llama~3.1~8B fits on one 24--48\,GB GPU; develop on a smaller model first.}
+\end{itemize}
+
+% ===========================================================================
+% 7  Work plan -- 
+% ===========================================================================
+\section{Work Plan}
+
+% \todo{maybe adjust timeline}
+\begin{itemize}
+  \item Months 1--2: literature, reproduce supervised manifold steering
+  \item Months 2--3: discovery stage on synthetic data, then on Llama
+  \item Months 3--4: unsupervised coordinates and steering, comparison
+  \item Month 5: Outlook, null tests
+  \item Month 6: writing
+\end{itemize}
+
+\section{Outlook: Applications and Extensions}\label{sec:outlook}
+
+% \todo{review}
+\begin{itemize}
+  \item safety: \fromold{SAEs also lost to linear probes on a safety-relevant task~\cite{gdm2025negative}; better feature selection narrows the steering gap~\cite{arad2025steering}.}
+  \begin{itemize}
+    \item \fromclaude{Graded safety behavior: refusal, sycophancy and persuasion come in degrees. Steering along a manifold could move a model smoothly from compliance to refusal instead of jumping between them; manifold steering names exactly these domains as future work~\cite{wurgaft2026manifoldsteering}.}
+    \item \fromclaude{Backdoors: adversarial inputs, including backdoor triggers, leave a topological signature in LLM activations~\cite{fay2026shape}; the topology step of the pipeline could test whether such signatures also show up in discovered concept manifolds.}
+  \end{itemize}
+  \item emotions: \fromold{a candidate unordered/2D concept, since LLMs represent emotions on a valence--arousal circle~\cite{sun2026valence}.}
+  \item second model family: \fromclaude{repeating the experiments on another model family (e.g., Gemma or Qwen) and on a different architecture such as a state-space model~\cite{gu2023mamba} would show whether the results hold beyond Llama, and would also inform source (2) from Section~\ref{sec:origins}.}
+\end{itemize}
+
+\printbibliography[heading=bibintoc,title={References}]
+
+\end{document}

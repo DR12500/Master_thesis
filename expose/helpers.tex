@@ -1,0 +1,133 @@
+% ===========================================================================
+%  LaTeX helper examples -- a cheat sheet, NOT part of the exposé.
+%  Compiles on its own (open this file and save, or Ctrl+Alt+B).
+%  Uses the same references.bib as expose.tex for the citation examples.
+% ===========================================================================
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage{csquotes}
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{parskip}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[inline]{enumitem}
+\usepackage{xcolor}
+\usepackage[backend=biber,style=numeric-comp,sorting=none,
+            maxbibnames=3,giveninits=true,doi=false]{biblatex}
+\addbibresource{references.bib}
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+
+\section*{LaTeX Helper Examples}
+\textcolor{red}{A cheat sheet for basic \LaTeX. Look at the source next to the
+PDF to see how each part is written.}
+
+\section{Text formatting}
+\textbf{Bold}, \textit{italic}, \emph{emphasis}, \underline{underlined},
+\texttt{monospace}, \textsc{Small Caps}, {\small small} and {\large large}.
+Quotes: \enquote{double quotes}. Dashes: 1--2 (range), text --- aside.
+A footnote.\footnote{Footnotes are numbered automatically.}
+A link: \url{https://arxiv.org} or \href{https://arxiv.org}{named link}.
+A forced line break\\ starts a new line; an empty line starts a new paragraph.
+
+\section{Lists}
+\begin{itemize}
+  \item Bullet point
+  \item Another one
+  \begin{itemize}
+    \item Nested bullet
+  \end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+  \item Numbered item
+  \item Second item
+\end{enumerate}
+
+\begin{description}
+  \item[Term] Its explanation.
+  \item[SAE] Sparse autoencoder.
+\end{description}
+
+Inline list: \begin{enumerate*}[label=(\roman*)] \item one, \item two,
+\item three. \end{enumerate*}
+
+\section{Mathematics}
+Inline maths: the activation $x \in \mathbb{R}^d$ is reconstructed as
+$\hat{x} = W_{\text{dec}} f(x) + b$.
+
+Numbered equation, referenced later as Equation~\eqref{eq:sae}:
+\begin{equation}
+  \mathcal{L}(x) = \lVert x - \hat{x} \rVert_2^2 + \lambda \lVert f(x) \rVert_1
+  \label{eq:sae}
+\end{equation}
+
+Unnumbered equation:
+\[
+  \cos(u, v) = \frac{u^\top v}{\lVert u \rVert \, \lVert v \rVert}
+\]
+
+Several aligned lines (\verb|&| marks the alignment point, \verb|\\| ends a line):
+\begin{align}
+  f(x)    &= \operatorname{ReLU}(W_{\text{enc}} x + b_{\text{enc}}) \\
+  \hat{x} &= W_{\text{dec}} f(x) + b_{\text{dec}} \nonumber
+\end{align}
+
+\section{Tables}
+Table~\ref{tab:example} uses \texttt{booktabs} rules.
+\begin{table}[h]
+  \centering
+  \caption{An example table.}
+  \label{tab:example}
+  \begin{tabular}{l c r}
+    \toprule
+    Method  & Layers & AUROC \\
+    \midrule
+    Probe   & 12     & 0.91  \\
+    SAE     & 12     & 0.87  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Figures}
+Figure~\ref{fig:example} is a placeholder box. For a real image, put the file
+next to this \texttt{.tex} file and use
+\verb|\includegraphics[width=0.6\textwidth]{myplot.png}|.
+\begin{figure}[h]
+  \centering
+  \fbox{\parbox[c][3cm][c]{0.5\textwidth}{\centering Your figure here}}
+  \caption{An example figure.}
+  \label{fig:example}
+\end{figure}
+
+\section{Citations and cross-references}
+\begin{itemize}
+  \item Numeric citation: \cite{bereska2024review}; several at once:
+        \cite{engels2025notall,gurnee2025manifolds}.
+  \item Author in the text: \textcite{bereska2024review} review the field.
+  \item Cite with a page: \cite[p.~4]{bereska2024review}.
+  \item Cross-reference: see Section~\ref{sec:helper-code} on
+        page~\pageref{sec:helper-code}.
+\end{itemize}
+New sources go into \texttt{references.bib}; they appear in the reference list
+only once they are cited.
+
+\section{Code and comments}
+\label{sec:helper-code}
+Inline code: \verb|model.run_with_cache(tokens)|.
+\begin{verbatim}
+for layer in range(n_layers):
+    acts = cache[f"blocks.{layer}.hook_resid_post"]
+\end{verbatim}
+% A line starting with % is a comment and does not appear in the PDF.
+
+\printbibliography
+
+\end{document}

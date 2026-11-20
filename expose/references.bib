@@ -1,0 +1,517 @@
+% ---------------------------------------------------------------------------
+% Sources for the exposé, taken from the reading list in
+% "Thesis Proposal: Geometry of LLM Features for AI Safety".
+%
+% Author lists and some titles are abbreviated ("and others", short names
+% like "MAxBench") because the draft only gave first authors and short
+% titles. Complete them from the linked pages before submitting.
+% Tip: Google Scholar / arXiv offer "Export BibTeX" for each paper.
+% ---------------------------------------------------------------------------
+
+% ===== Shared context [S] =====
+
+@misc{bereska2024review,
+  author       = {Bereska, Leonard and Gavves, Efstratios},
+  title        = {Mechanistic Interpretability for {AI} Safety -- A Review},
+  year         = {2024},
+  eprint       = {2404.14082},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2404.14082}
+}
+
+@article{gurnee2025manifolds,
+  author       = {Gurnee, Wes and Ameisen, Emmanuel and Kauvar, Isaac and Tarng, Julius and Pearce, Adam and Olah, Chris and Batson, Joshua},
+  title        = {When Models Manipulate Manifolds: The Geometry of a Counting Task},
+  journaltitle = {Transformer Circuits Thread},
+  date         = {2025-10-21},
+  url          = {https://transformer-circuits.pub/2025/linebreaks/index.html},
+  note         = {Also available as arXiv:2601.04480 (2026)}
+}
+
+@inproceedings{engels2025notall,
+  author       = {Engels, Joshua and others},
+  title        = {Not All Language Model Features Are One-Dimensionally Linear},
+  booktitle    = {International Conference on Learning Representations (ICLR)},
+  year         = {2025},
+  url          = {https://openreview.net/forum?id=d63a4AM4hb}
+}
+
+@misc{bhalla2026saemanifolds,
+  author       = {Bhalla, Usha and Fel, Thomas and Rager, Can and others},
+  title        = {Do Sparse Autoencoders Capture Concept Manifolds?},
+  year         = {2026},
+  eprint       = {2604.28119},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2604.28119}
+}
+
+@inproceedings{korznikov2026sanity,
+  author       = {Korznikov, Anton and Galichin, Andrey and Dontsov, Alexey and Rogov, Oleg and Oseledets, Ivan and Tutubalina, Elena},
+  title        = {Sanity Checks for Sparse Autoencoders: Do {SAEs} Beat Random Baselines?},
+  booktitle    = {ICML 2026 Workshop on Mechanistic Interpretability},
+  year         = {2026},
+  eprint       = {2602.14111},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2602.14111}
+}
+
+@online{gdm2025negative,
+  author       = {{Google DeepMind Safety Research}},
+  title        = {Negative Results for Sparse Autoencoders on Downstream Tasks and Deprioritising {SAE} Research},
+  year         = {2025},
+  url          = {https://deepmindsafetyresearch.medium.com/negative-results-for-sparse-autoencoders-on-downstream-tasks-and-deprioritising-sae-research-6cadcfc125b9}
+}
+
+@inproceedings{wu2025axbench,
+  author       = {Wu, Zhengxuan and Arora, Aryaman and Geiger, Atticus and others},
+  title        = {{AxBench}: Steering {LLMs}? Even Simple Baselines Outperform Sparse Autoencoders},
+  booktitle    = {International Conference on Machine Learning (ICML)},
+  year         = {2025},
+  eprint       = {2501.17148},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2501.17148}
+}
+
+@inproceedings{arad2025steering,
+  author       = {Arad, Dana and Mueller, Aaron and Belinkov, Yonatan},
+  title        = {{SAEs} Are Good for Steering -- If You Select the Right Features},
+  booktitle    = {Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year         = {2025},
+  eprint       = {2505.20063},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2505.20063}
+}
+
+@inproceedings{fay2026shape,
+  author       = {Fay, Aideen and Garc{\'i}a-Redondo, In{\'e}s and Wang, Qiquan and Dubossarsky, Haim and Monod, Anthea},
+  title        = {The Shape of Adversarial Influence: Characterizing {LLM} Latent Spaces with Persistent Homology},
+  booktitle    = {International Conference on Learning Representations (ICLR)},
+  year         = {2026},
+  eprint       = {2505.20435},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2505.20435}
+}
+
+% ===== Proposal A [A] =====
+
+@misc{appapogu2026maxbench,
+  author       = {Appapogu, Divya and Behrens, Freya and Belinkov, Yonatan and Mueller, Aaron},
+  title        = {{MAxBench}: A Multinomial Concept Recovery Benchmark},
+  year         = {2026},
+  eprint       = {2609.13072},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2609.13072}
+}
+
+@misc{modell2026probing,
+  author       = {Modell, Alexander},
+  title        = {Probing for Representation Manifolds in Superposition},
+  year         = {2026},
+  eprint       = {2605.18537},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2605.18537}
+}
+
+@article{tiblias2026smds,
+  author       = {Tiblias, Federico and Bigoulaeva, Irina and Niu, Jingcheng and Balloccu, Simone and Gurevych, Iryna},
+  title        = {Hypothesis-Driven Feature Manifold Analysis in {LLMs} via Supervised Multi-Dimensional Scaling},
+  journal      = {Transactions on Machine Learning Research (TMLR)},
+  year         = {2026},
+  eprint       = {2510.01025},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2510.01025}
+}
+
+@misc{modell2025origins,
+  author       = {Modell, Alexander and Rubin-Delanchy, Patrick and Whiteley, Nick},
+  title        = {The Origins of Representation Manifolds in Large Language Models},
+  year         = {2025},
+  eprint       = {2505.18235},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2505.18235}
+}
+
+@misc{skysphere2026,
+  title        = {Sky Sphere Representation in Language Models},
+  year         = {2026},
+  eprint       = {2607.27092},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2607.27092}
+}
+
+@misc{nguyen2026innsteer,
+  author       = {Nguyen and Le},
+  title        = {{INNSteer}},
+  year         = {2026},
+  eprint       = {2606.08454},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2606.08454}
+}
+
+@inproceedings{kim2026nonlinear,
+  author       = {Kim},
+  title        = {Non-linear Interventions on Large Language Models},
+  booktitle    = {International Conference on Machine Learning (ICML)},
+  year         = {2026},
+  eprint       = {2605.14749},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2605.14749}
+}
+
+@inproceedings{wurgaft2026manifoldsteering,
+  author       = {Wurgaft, Daniel and Rager, Can and Kowal, Matthew and others},
+  title        = {Manifold Steering Reveals the Shared Geometry of Neural Network Representation and Behavior},
+  booktitle    = {ICML 2026 Workshop on Mechanistic Interpretability},
+  year         = {2026},
+  eprint       = {2605.05115},
+  eprinttype   = {arXiv},
+  url          = {https://openreview.net/forum?id=QklBm5nnR9}
+}
+
+@inproceedings{shafran2026regions,
+  author       = {Shafran, Or and Ronen, Shaked and Fahn, Omri and Ravfogel, Shauli and Geiger, Atticus and Geva, Mor},
+  title        = {From Directions to Regions: Decomposing Activations in Language Models via Local Geometry},
+  booktitle    = {International Conference on Machine Learning (ICML)},
+  year         = {2026},
+  eprint       = {2602.02464},
+  eprinttype   = {arXiv},
+  url        = {https://openreview.net/forum?id=Tz7n7pX9cO}
+}
+
+% ===== Proposal B [B] =====
+
+@inproceedings{backdoorbench2026,
+  title        = {Detecting Whether an {LLM} has been Backdoored},
+  booktitle    = {International Conference on Machine Learning (ICML)},
+  year         = {2026},
+  url          = {https://icml.cc/virtual/2026/79399}
+}
+
+@misc{hughes2026toxscreen,
+  author       = {Hughes and others},
+  title        = {{ToxScreen}},
+  year         = {2026},
+  eprint       = {2607.26849},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2607.26849}
+}
+
+@inproceedings{watchweights2026,
+  title        = {Watch the Weights},
+  booktitle    = {International Conference on Learning Representations (ICLR)},
+  year         = {2026},
+  url          = {https://iclr.cc/virtual/2026/poster/10009043}
+}
+
+@misc{marks2025auditing,
+  author       = {Marks, Samuel and others},
+  title        = {Auditing Language Models for Hidden Objectives},
+  year         = {2025},
+  eprint       = {2503.10965},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2503.10965}
+}
+
+@misc{cywinski2025secret,
+  author       = {Cywi{\'n}ski and others},
+  title        = {Eliciting Secret Knowledge from Language Models},
+  year         = {2025},
+  eprint       = {2510.01070},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2510.01070}
+}
+
+@misc{cywinski2025taboo,
+  author       = {Cywi{\'n}ski and others},
+  title        = {Towards Eliciting Latent Knowledge with Mechanistic Interpretability},
+  year         = {2025},
+  eprint       = {2505.14352},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2505.14352}
+}
+
+@online{bricken2025agents,
+  author       = {Bricken, Trenton and others},
+  title        = {Building and Evaluating Alignment Auditing Agents},
+  year         = {2025},
+  url          = {https://alignment.anthropic.com/2025/automated-auditing}
+}
+
+@misc{sheshadri2026auditbench,
+  author       = {Sheshadri and others},
+  title        = {{AuditBench}},
+  year         = {2026},
+  eprint       = {2602.22755},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2602.22755}
+}
+
+@misc{weightoracles2026,
+  title        = {Weight Oracles},
+  year         = {2026},
+  eprint       = {2610.07334},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2610.07334}
+}
+
+@misc{lasnier2026triggers,
+  author       = {Lasnier and others},
+  title        = {Triggers Hijack Language Circuits},
+  year         = {2026},
+  eprint       = {2602.10382},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2602.10382}
+}
+
+@misc{auditstress2026,
+  title        = {Audit Stress-Testing},
+  year         = {2026},
+  eprint       = {2602.08877},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2602.08877}
+}
+
+% ===== Added for the background section =====
+
+@misc{elhage2022toy,
+  author       = {Elhage, Nelson and Hume, Tristan and Olsson, Catherine and others},
+  title        = {Toy Models of Superposition},
+  year         = {2022},
+  eprint       = {2209.10652},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2209.10652}
+}
+
+@misc{zou2023representation,
+  author       = {Zou, Andy and Phan, Long and Chen, Sarah and others},
+  title        = {Representation Engineering: A Top-Down Approach to {AI} Transparency},
+  year         = {2023},
+  eprint       = {2310.01405},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2310.01405}
+}
+
+@misc{feucht2026arithmetic,
+  author       = {Feucht, Sheridan and Haklay, Tal and Bhalla, Usha and others},
+  title        = {Arithmetic in the Wild: {Llama} uses Base-10 Addition to Reason About Cyclic Concepts},
+  year         = {2026},
+  eprint       = {2605.01148},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2605.01148}
+}
+
+% ===== Benchmarks =====
+
+@misc{gupta2024interpbench,
+  author       = {Gupta, Rohan and Arcuschin, Iv{\'a}n and Kwa, Thomas and Garriga-Alonso, Adri{\`a}},
+  title        = {{InterpBench}: Semi-Synthetic Transformers for Evaluating Mechanistic Interpretability Techniques},
+  year         = {2024},
+  eprint       = {2407.14494},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2407.14494}
+}
+
+@misc{mueller2025mib,
+  author       = {Mueller, Aaron and Geiger, Atticus and Wiegreffe, Sarah and others},
+  title        = {{MIB}: A Mechanistic Interpretability Benchmark},
+  year         = {2025},
+  eprint       = {2504.13151},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2504.13151}
+}
+
+@misc{karvonen2025saebench,
+  author       = {Karvonen, Adam and Rager, Can and Lin, Johnny and others},
+  title        = {{SAEBench}: A Comprehensive Benchmark for Sparse Autoencoders in Language Model Interpretability},
+  year         = {2025},
+  eprint       = {2503.09532},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2503.09532}
+}
+
+@misc{chanin2026synthsaebench,
+  author       = {Chanin, David and Garriga-Alonso, Adri{\`a}},
+  title        = {{SynthSAEBench}: Evaluating Sparse Autoencoders on Scalable Realistic Synthetic Data},
+  year         = {2026},
+  eprint       = {2602.14687},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2602.14687}
+}
+
+@misc{huang2024ravel,
+  author       = {Huang, Jing and Wu, Zhengxuan and Potts, Christopher and others},
+  title        = {{RAVEL}: Evaluating Interpretability Methods on Disentangling Language Model Representations},
+  year         = {2024},
+  eprint       = {2402.17700},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2402.17700}
+}
+
+@online{bhalla2026blog,
+  author       = {Bhalla, Usha and Fel, Thomas and Rager, Can and others},
+  title        = {Can {SAEs} Capture Neural Geometry?},
+  organization = {Goodfire Research},
+  date         = {2026-05-21},
+  url          = {https://www.goodfire.com/research/can-saes-capture-neural-geometry},
+  note         = {Blog post accompanying arXiv:2604.28119}
+}
+
+% ===== Added for TDA and the emotion direction =====
+
+@misc{gardinazzi2024persistent,
+  author       = {Gardinazzi, Yuri and Viswanathan, Karthik and Panerai, Giada and others},
+  title        = {Persistent Topological Features in Large Language Models},
+  year         = {2024},
+  eprint       = {2410.11042},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2410.11042}
+}
+
+@article{tauzin2021giotto,
+  author       = {Tauzin, Guillaume and Lupo, Umberto and Tunstall, Lewis and others},
+  title        = {giotto-tda: A Topological Data Analysis Toolkit for Machine Learning and Data Exploration},
+  journal      = {Journal of Machine Learning Research},
+  volume       = {22},
+  year         = {2021},
+  eprint       = {2004.02551},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2004.02551}
+}
+
+@misc{sun2026valence,
+  author       = {Sun, Lihao and Yan, Lewen and Lu, Xiaoya and others},
+  title        = {Valence-Arousal Subspace in {LLMs}: Circular Emotion Geometry and Multi-Behavioral Control},
+  year         = {2026},
+  eprint       = {2604.03147},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2604.03147}
+}
+
+@misc{bigelow2026stories,
+  author       = {Bigelow, Eric and Sarfati, Rapha{\"e}l and Wurgaft, Daniel and others},
+  title        = {Stories in Space: In-Context Learning Trajectories in Conceptual Belief Space},
+  year         = {2026},
+  eprint       = {2605.12412},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2605.12412},
+  note         = {Blog post: \url{https://www.goodfire.com/research/stories-in-space}}
+}
+
+@article{rathore2021topoact,
+  author       = {Rathore, Archit and Chalapathi, Nithin and Palande, Sourabh and Wang, Bei},
+  title        = {{TopoAct}: Visually Exploring the Shape of Activations in Deep Learning},
+  journal      = {Computer Graphics Forum},
+  year         = {2021},
+  eprint       = {1912.06332},
+  eprinttype   = {arXiv}
+}
+
+@inproceedings{lindner2023tracr,
+  author       = {Lindner, David and Kram{\'a}r, J{\'a}nos and Farquhar, Sebastian and others},
+  title        = {{Tracr}: Compiled Transformers as a Laboratory for Interpretability},
+  booktitle    = {Advances in Neural Information Processing Systems},
+  year         = {2023},
+  eprint       = {2301.05062},
+  eprinttype   = {arXiv}
+}
+
+@inproceedings{park2024linear,
+  author       = {Park, Kiho and Choe, Yo Joong and Veitch, Victor},
+  title        = {The Linear Representation Hypothesis and the Geometry of Large Language Models},
+  booktitle    = {International Conference on Machine Learning (ICML)},
+  year         = {2024},
+  eprint       = {2311.03658},
+  eprinttype   = {arXiv}
+}
+
+% ===== Added for the new exposé structure (Structure.md reading list) =====
+
+@online{goodfire2026world,
+  author       = {Geiger, Atticus and Lubana, Ekdeep Singh and Fel, Thomas and Merullo, Jack and Byun, Michael Jae and Lewis, Owen and McGrath, Tom},
+  title        = {The World Inside Neural Networks},
+  organization = {Goodfire Research},
+  date         = {2026-05-07},
+  url          = {https://www.goodfire.com/research/the-world-inside-neural-networks}
+}
+
+@misc{karkada2026symmetry,
+  author       = {Karkada, Dhruva and Korchinski, Daniel J. and Nava, Andres and Wyart, Matthieu and Bahri, Yasaman},
+  title        = {Symmetry in Language Statistics Shapes the Geometry of Model Representations},
+  year         = {2026},
+  eprint       = {2602.15029},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2602.15029}
+}
+
+@inproceedings{prieto2026correlations,
+  author       = {Prieto, Lucas and Stevinson, Edward and Barsbey, Melih and Birdal, Tolga and Mediano, Pedro A. M.},
+  title        = {From Data Statistics to Feature Geometry: How Correlations Shape Superposition},
+  booktitle    = {International Conference on Learning Representations (ICLR)},
+  year         = {2026},
+  eprint       = {2603.09972},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2603.09972}
+}
+
+@misc{oozeer2026riemannian,
+  author       = {Oozeer, Narmeen and Raval, Shivam and Quirke, Philip and Ravikiran, Manikandan and Phillips, Jeff and Upadhyay, Shriyash and Abdullah, Amirali},
+  title        = {Riemannian-Manifold Steering: Geometry-Aware Generative Autoencoders for Label-Free Steering},
+  year         = {2026},
+  eprint       = {2605.24942},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2605.24942}
+}
+
+@misc{francel2026smixae,
+  author       = {Francel, Collin},
+  title        = {{SMIXAE}: Towards Unsupervised Manifold Discovery in Language Models},
+  year         = {2026},
+  eprint       = {2605.09224},
+  eprinttype   = {arXiv},
+  url          = {https://arxiv.org/abs/2605.09224}
+}
+
+@inproceedings{biderman2023pythia,
+  author       = {Biderman, Stella and Schoelkopf, Hailey and Anthony, Quentin and others},
+  title        = {Pythia: A Suite for Analyzing Large Language Models Across Training and Scaling},
+  booktitle    = {International Conference on Machine Learning (ICML)},
+  year         = {2023},
+  eprint       = {2304.01373},
+  eprinttype   = {arXiv}
+}
+
+@misc{gu2023mamba,
+  author       = {Gu, Albert and Dao, Tri},
+  title        = {Mamba: Linear-Time Sequence Modeling with Selective State Spaces},
+  year         = {2023},
+  eprint       = {2312.00752},
+  eprinttype   = {arXiv}
+}
+
+@misc{su2021roformer,
+  author       = {Su, Jianlin and Lu, Yu and Pan, Shengfeng and others},
+  title        = {{RoFormer}: Enhanced Transformer with Rotary Position Embedding},
+  year         = {2021},
+  eprint       = {2104.09864},
+  eprinttype   = {arXiv}
+}
+
+@article{tenenbaum2000isomap,
+  author       = {Tenenbaum, Joshua B. and de Silva, Vin and Langford, John C.},
+  title        = {A Global Geometric Framework for Nonlinear Dimensionality Reduction},
+  journal      = {Science},
+  volume       = {290},
+  number       = {5500},
+  pages        = {2319--2323},
+  year         = {2000}
+}
+
+@article{coifman2006diffusion,
+  author       = {Coifman, Ronald R. and Lafon, St{\'e}phane},
+  title        = {Diffusion Maps},
+  journal      = {Applied and Computational Harmonic Analysis},
+  volume       = {21},
+  number       = {1},
+  pages        = {5--30},
+  year         = {2006}
+}

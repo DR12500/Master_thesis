@@ -1,0 +1,39 @@
+{
+  // LaTeX Workshop: on save, build the normal PDF and, for expose_written.tex
+  // only, also the hand-in version expose_Dominik_Rittner.pdf (all black).
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk + hand-in PDF",
+      "tools": ["latexmk", "handin"]
+    },
+    {
+      "name": "latexmk",
+      "tools": ["latexmk"]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-pdf",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "handin",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "if ('%DOCFILE%' -eq 'expose_written') { latexmk -interaction=nonstopmode -file-line-error -pdf '-outdir=%OUTDIR%' -jobname=expose_Dominik_Rittner '%DOC%'; exit $LASTEXITCODE }"
+      ],
+      "env": {}
+    }
+  ]
+}
